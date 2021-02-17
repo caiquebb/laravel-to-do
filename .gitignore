@@ -12,3 +12,8 @@ Homestead.yaml
 npm-debug.log
 yarn-error.log
 supervisord.*
+
+# Laravel mix
+public/js
+public/css
+public/mix-manifest.json
