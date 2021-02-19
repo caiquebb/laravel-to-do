@@ -21,7 +21,7 @@
                                     Dashboard
                                 </jet-nav-link>
 
-                                <jet-nav-link :href="route('todos-list')" :active="route().current('todos-list')">
+                                <jet-nav-link :href="route('todos.list')" :active="route().current('todos.list')">
                                     To Do
                                 </jet-nav-link>
                             </div>
