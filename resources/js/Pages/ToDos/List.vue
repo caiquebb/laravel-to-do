@@ -6,7 +6,7 @@
             </h2>
         </template>
 
-        <div class="py-12">
+        <div class="py-6">
 
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
                 <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -21,15 +21,13 @@
 
 <script>
     import AppLayout from '@/Layouts/AppLayout';
-    import Button from '@/Jetstream/Button';
-    import TodoCard from './Card';
-    import AddTodoCard from './AddCard';
+    import TodoCard from './TodoCard';
+    import AddTodoCard from './AddTodoCard';
     import JetNavLink from '@/Jetstream/NavLink';
 
     export default {
         components: {
             AppLayout,
-            Button,
             TodoCard,
             AddTodoCard,
             JetNavLink,

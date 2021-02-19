@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Todo extends Model
+class TodoItem extends Model
 {
     use HasFactory;
 
@@ -15,24 +15,26 @@ class Todo extends Model
      * @var array
      */
     protected $fillable = [
-        'user_id',
+        'todo_id',
+        'todo_item_id',
         'description',
-        'slug',
+        'completed',
     ];
 
     /**
-     * Get the user that owns the todo.
+     * The attributes that should be cast.
+     *
+     * @var array
      */
-    public function user()
-    {
-        return $this->belongsTo(User::class);
-    }
+    protected $casts = [
+        'completed' => 'boolean',
+    ];
 
     /**
-     * Get the items for the todo.
+     * Get the todo that owns the item.
      */
-    public function todoItems()
+    public function todo()
     {
-        return $this->hasMany(TodoItem::class);
+        return $this->belongsTo(Todo::class);
     }
 }

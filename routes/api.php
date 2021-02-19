@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Controllers\TodoController;
+use App\Http\Controllers\TodoItemController;
+use App\Http\Controllers\TodoTodoItemController;
 use App\Http\Controllers\UserController;
 use App\Http\Controllers\UserTodoController;
 use Illuminate\Http\Request;
@@ -25,6 +27,8 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResources([
         'users' => UserController::class,
         'todos' => TodoController::class,
+        'todo-items' => TodoItemController::class,
         'users.todos' => UserTodoController::class,
+        'todos.todo-items' => TodoTodoItemController::class,
     ]);
 });

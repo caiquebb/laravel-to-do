@@ -60,6 +60,9 @@ class User extends Authenticatable
         'profile_photo_url',
     ];
 
+    /**
+     * Get the todos for the user.
+     */
     public function todos()
     {
         return $this->hasMany(Todo::class);

@@ -63,6 +63,8 @@
 
                     this.$emit('createdTodo');
 
+                    this.form = {};
+
                     this.addingTodo = false;
                 } catch (error) {
                     const { response } = error;
