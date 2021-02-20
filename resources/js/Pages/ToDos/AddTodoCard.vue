@@ -2,7 +2,7 @@
     <div>
         <div v-if="addingTodo" :class="[addCardClass, 'space-x-2']">
             <div class="flex-1">
-                <jet-input ref="inputTodoDescription" class="w-full" type="text" placeholder="Description" v-model="form.description"/>
+                <jet-input ref="inputTodoDescription" class="w-full" type="text" placeholder="Description" v-model="form.description" @keyup.enter.native="createTodo"/>
 
                 <jet-input-error :message="errors.description ? errors.description.join(' ') : ''" />
             </div>
