@@ -31,4 +31,9 @@ Route::middleware('auth:sanctum')->group(function () {
         'users.todos' => UserTodoController::class,
         'todos.todo-items' => TodoTodoItemController::class,
     ]);
+
+    Route::prefix('/todos/{id}')->group(function () {
+        Route::post('/restore', [TodoController::class, 'restore']);
+        Route::delete('/force', [TodoController::class, 'forceDelete']);
+    });
 });

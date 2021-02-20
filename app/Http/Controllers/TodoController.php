@@ -25,7 +25,11 @@ class TodoController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $todo = new Todo($request->all());
+
+        $todo->save();
+
+        return $todo;
     }
 
     /**
@@ -48,7 +52,9 @@ class TodoController extends Controller
      */
     public function update(Request $request, Todo $todo)
     {
-        //
+        $todo->fill($request->all());
+
+        return $todo->save();
     }
 
     /**
@@ -60,5 +66,35 @@ class TodoController extends Controller
     public function destroy(Todo $todo)
     {
         return $todo->delete();
+    }
+
+    /**
+     * Restore the specified resource from storage.
+     *
+     * @param  \App\Models\Todo  $todo
+     * @return \Illuminate\Http\Response
+     */
+    public function restore(int $id)
+    {
+        $todo = Todo::withTrashed()->findOrFail($id);
+
+        $todo->restore();
+
+        return $todo;
+    }
+
+    /**
+     * Force remove the specified resource from storage.
+     *
+     * @param  \App\Models\Todo  $todo
+     * @return \Illuminate\Http\Response
+     */
+    public function forceDelete(int $id)
+    {
+        $todo = Todo::withTrashed()->findOrFail($id);
+
+        $todo->forceDelete();
+
+        return $todo;
     }
 }

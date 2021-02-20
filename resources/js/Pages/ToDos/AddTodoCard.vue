@@ -2,7 +2,7 @@
     <div>
         <div v-if="addingTodo" :class="[addCardClass, 'space-x-2']">
             <div class="flex-1">
-                <jet-input class="w-full" type="text" placeholder="Description" v-model="form.description"/>
+                <jet-input ref="inputTodoDescription" class="w-full" type="text" placeholder="Description" v-model="form.description"/>
 
                 <jet-input-error :message="errors.description ? errors.description.join(' ') : ''" />
             </div>
@@ -13,9 +13,8 @@
         </div>
         <div v-else @click="addTodo" :class="[!addingTodo ? newCardClass : '', addCardClass]">
             <div class="inline-flex self-center">
-                <svg class="w-6 h-6" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6" />
-                </svg>
+                <jet-svg-icon icon="plus" />
+
                 <span>New To Do</span>
             </div>
         </div>
@@ -26,12 +25,14 @@
     import JetIconButton from '@/Jetstream/IconButton';
     import JetInput from '@/Jetstream/Input';
     import JetInputError from '@/Jetstream/InputError';
+    import JetSvgIcon from '@/JetStream/SvgIcon';
 
     export default {
         components: {
             JetIconButton,
             JetInput,
             JetInputError,
+            JetSvgIcon,
         },
 
         data: function () {
@@ -51,6 +52,11 @@
                 }
 
                 this.addingTodo = true;
+
+                setTimeout(() => {
+                    this.$refs.inputTodoDescription.$el.focus();
+                }, 250);
+
             },
 
             createTodo: async function () {

@@ -15,9 +15,15 @@ class UserTodoController extends Controller
      * @param  \App\Models\User  $user
      * @return \Illuminate\Http\Response
      */
-    public function index(User $user)
+    public function index(Request $request, User $user)
     {
-        return $user->todos()->get();
+        $query = $user->todos();
+
+        if ($request->filter === 'recycle-bin') {
+            $query->onlyTrashed();
+        }
+
+        return $query->get();
     }
 
     /**
