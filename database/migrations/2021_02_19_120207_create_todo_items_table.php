@@ -15,13 +15,11 @@ class CreateTodoItemsTable extends Migration
     {
         Schema::create('todo_items', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('todo_id');
+            $table->foreignId('todo_id')->constrained()->onUpdate('cascade')->onDelete('cascade');
             $table->unsignedBigInteger('todo_item_id')->nullable();
             $table->string('description');
             $table->boolean('completed')->default(false);
             $table->timestamps();
-
-            $table->foreign('todo_id')->references('id')->on('todos');
         });
     }
 
