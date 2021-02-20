@@ -25,7 +25,7 @@
     import JetIconButton from '@/Jetstream/IconButton';
     import JetInput from '@/Jetstream/Input';
     import JetInputError from '@/Jetstream/InputError';
-    import JetSvgIcon from '@/JetStream/SvgIcon';
+    import JetSvgIcon from '@/Jetstream/SvgIcon';
 
     export default {
         components: {

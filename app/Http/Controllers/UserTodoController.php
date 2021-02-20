@@ -21,6 +21,9 @@ class UserTodoController extends Controller
 
         if ($request->filter === 'recycle-bin') {
             $query->onlyTrashed();
+        } elseif ($request->filter === 'shared') {
+            $query = Todo::where('shared_emails', 'like', "%{$user->email}%")
+                ->where('user_id', '!=', $user->id);
         }
 
         return $query->get();

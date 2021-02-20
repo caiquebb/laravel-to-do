@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Todo;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
@@ -33,5 +34,13 @@ Route::middleware(['auth:sanctum', 'verified'])->group(function () {
         Route::get('/', function () {
             return Inertia::render('ToDos/List');
         })->name('list');
+
+        Route::get('/{slug}', function (string $slug) {
+            $todo = Todo::where('slug', $slug)->first();
+
+            return Inertia::render('ToDos/Show', [
+                'todo' => $todo,
+            ]);
+        })->name('show');
     });
 });

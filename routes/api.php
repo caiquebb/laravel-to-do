@@ -22,7 +22,7 @@ use Illuminate\Support\Facades\Route;
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/user', function (Request $request) {
         return $request->user();
-    });
+    })->name('user');
 
     Route::apiResources([
         'users' => UserController::class,
@@ -32,8 +32,12 @@ Route::middleware('auth:sanctum')->group(function () {
         'todos.todo-items' => TodoTodoItemController::class,
     ]);
 
-    Route::prefix('/todos/{id}')->group(function () {
-        Route::post('/restore', [TodoController::class, 'restore']);
-        Route::delete('/force', [TodoController::class, 'forceDelete']);
+    Route::prefix('/todos/{id}')->name('todos.')->group(function () {
+        Route::post('/restore', [TodoController::class, 'restore'])->name('restore');
+        Route::delete('/force', [TodoController::class, 'forceDelete'])->name('force');
+    });
+
+    Route::prefix('/todos/{todo}')->name('todos.')->group(function () {
+        Route::put('/share', [TodoController::class, 'share'])->name('share');
     });
 });

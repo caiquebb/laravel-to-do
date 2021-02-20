@@ -11,6 +11,7 @@
 
                     <select class="rounded-lg text-sm py-1" v-model="params.filter">
                         <option value="my-todos">My ToDos</option>
+                        <option value="shared">Shared</option>
                         <option value="recycle-bin">Recycle Bin</option>
                     </select>
                 </div>

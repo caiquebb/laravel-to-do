@@ -19,6 +19,7 @@ class Todo extends Model
         'user_id',
         'description',
         'slug',
+        'shared_emails',
     ];
 
     /**

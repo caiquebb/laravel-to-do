@@ -7,7 +7,7 @@
                     <p class="text-xs">Created At: {{dateTimeFormat(todo.created_at)}}</p>
                     <p v-if="todo.deleted_at" class="text-xs text-red-600">Deleted At: {{dateTimeFormat(todo.deleted_at)}}</p>
                 </div>
-                <div class="flex-none self-center">
+                <div v-if="todo.user_id === user.id" class="flex-none self-center">
                     <jet-dropdown align="right" width="48">
                         <template #trigger>
                             <span class="inline-flex rounded-md">
@@ -33,7 +33,7 @@
                             </template>
 
                             <template v-else>
-                                <jet-dropdown-link as="button">
+                                <jet-dropdown-link as="button" @click.native="shareTodoModal">
                                     Share
                                 </jet-dropdown-link>
 
@@ -45,6 +45,36 @@
                             </template>
                         </template>
                     </jet-dropdown>
+
+                    <!-- Share ToDo Modal -->
+                    <jet-dialog-modal :show="showShareTodoModal" @close="closeModal">
+                        <template #title>
+                            Share To Do
+                        </template>
+
+                        <template #content>
+                            Are you sure you want to share your to do? Once your todo is shared, all of its items will be available for users to edit or remove. Please enter the emails that you would like to share your to do separeted with comma (,).
+
+                            <div class="mt-4">
+                                <jet-input type="text" class="mt-1 block w-full" placeholder="Shared e-mails"
+                                            ref="shared_emails"
+                                            v-model="todo.shared_emails"
+                                            @keyup.enter.native="shareTodo" />
+
+                                <jet-input-error :message="form.errors.shared_emails ? form.errors.shared_emails.join(' ') : ''" class="mt-2" />
+                            </div>
+                        </template>
+
+                        <template #footer>
+                            <jet-secondary-button @click.native="closeModal">
+                                Cancel
+                            </jet-secondary-button>
+
+                            <jet-button class="ml-2" @click.native="shareTodo" :class="{ 'opacity-25': form.processing }" :disabled="form.processing">
+                                Send Invitation
+                            </jet-button>
+                        </template>
+                    </jet-dialog-modal>
                 </div>
             </div>
 
@@ -67,6 +97,11 @@
     import JetDropdownLink from '@/Jetstream/DropdownLink';
     import JetSvgIcon from '@/Jetstream/SvgIcon';
     import TodoItemCard from './TodoItemCard';
+    import JetDialogModal from '@/Jetstream/DialogModal';
+    import JetInput from '@/Jetstream/Input'
+    import JetInputError from '@/Jetstream/InputError'
+    import JetSecondaryButton from '@/Jetstream/SecondaryButton'
+    import JetButton from '@/Jetstream/Button'
 
     import moment from 'moment';
 
@@ -77,6 +112,11 @@
             JetDropdownLink,
             JetSvgIcon,
             TodoItemCard,
+            JetDialogModal,
+            JetInput,
+            JetInputError,
+            JetSecondaryButton,
+            JetButton,
         },
 
         props: {
@@ -85,7 +125,13 @@
 
         data: function () {
             return {
-                showTodoItemCard: false
+                showShareTodoModal: false,
+                showTodoItemCard: false,
+                form: {
+                    processing: false,
+                    errors: {},
+                },
+                user: this.$page.props.user,
             }
         },
 
@@ -120,6 +166,41 @@
 
             dateTimeFormat: function (date) {
                 return moment(date).format('L - LTS');
+            },
+
+            shareTodoModal: function () {
+                this.showShareTodoModal = true;
+
+                setTimeout(() => this.$refs.shared_emails.focus(), 250)
+            },
+
+            shareTodo: async function () {
+                this.form.processing = true;
+
+                const { id } = this.todo;
+
+                try {
+                    await axios.put(route('api.todos.share', { todo: id }), this.todo);
+
+                    this.closeModal();
+                } catch (error) {
+                    console.error(error);
+
+                    if (error.response) {
+                        const { status, data } = error.response;
+
+                        if (status === 422) {
+                            this.form.errors = data.errors;
+                        }
+                    }
+                }
+
+                this.form.processing = false
+            },
+
+            closeModal: function () {
+                this.showShareTodoModal = false
+                this.form.errors = {};
             },
         },
     }
