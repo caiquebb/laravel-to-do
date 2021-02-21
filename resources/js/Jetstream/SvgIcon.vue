@@ -44,6 +44,8 @@
                     chevronDoubleUp: 'M5 11l7-7 7 7M5 19l7-7 7 7',
                     plus: 'M12 6v6m0 0v6m0-6h6m-6 0H6',
                     trash: 'M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16',
+                    menuAlt3: 'M4 6h16M4 12h16m-7 6h7',
+                    switchVertical: 'M7 16V4m0 0L3 8m4-4l4 4m6 0v12m0 0l4-4m-4 4l-4-4',
                 },
             }
         }

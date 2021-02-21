@@ -50,7 +50,30 @@ class TodoItemController extends Controller
     {
         $todoItem->fill($request->all());
 
-        return $todoItem->save();
+        $dirty = $todoItem->getDirty();
+
+        $todoItem->save();
+
+        // If change field completed then check parent ans childs.
+        if (array_key_exists('completed', $dirty)) {
+            if ($todoItem->todo_item_id) {
+                // if children check if all the children have the same value to update de parent
+                $count = TodoItem::where([
+                    ['todo_item_id', $todoItem->todo_item_id],
+                    ['completed', '!=', $todoItem->completed],
+                    ['id', '!=', $todoItem->id],
+                ])->count();
+
+                $parentCompleted = $count === 0 ? $todoItem->completed : false;
+
+                TodoItem::where('id', $todoItem->todo_item_id)->update(['completed' => $parentCompleted]);
+            } else {
+                // If parent then change all children to the same value from parent
+                TodoItem::where('todo_item_id', $todoItem->id)->update(['completed' => $todoItem->completed]);
+            }
+        }
+
+        return $todoItem;
     }
 
     /**
