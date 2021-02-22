@@ -38,8 +38,8 @@ jobs:
 
       # Build and push docker image
       - run: |
-          docker build -t caiquebb/laravel-todo -f docker/Dockerfile.prod .
-          docker push caiquebb/laravel-todo
+          docker build -t caiquebb/laravel-todo:${{ github.sha }} -f docker/Dockerfile.prod .
+          docker push caiquebb/laravel-todo:${{ github.sha }}
 
       # Set Azure AKS config
       - name: Kubernetes set context
@@ -58,3 +58,5 @@ jobs:
           manifests: |
               k8s/deploy.yml
               k8s/service.yml
+          images: |
+              caiquebb/laravel-todo:${{ github.sha }}
