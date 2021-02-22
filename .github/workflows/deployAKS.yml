@@ -39,3 +39,19 @@ jobs:
       - run: |
           docker build -t caiquebb/laravel-todo -f docker/Dockerfile.prod .
           docker push caiquebb/laravel-todo
+      
+      - name: Kubernetes set context
+        uses: Azure/k8s-set-context@v1
+        with:
+          # Kubernetes Config
+          kubeconfig: ${{ secrets.PIGVELOP_AKS_KUBECONFIG }}
+          
+      - name: Deploy to Kubernetes cluster
+        uses: Azure/k8s-deploy@v1.3
+        with:
+          # Choose the target Kubernetes namespace. If the namespace is not provided, the commands will run in the default namespace.
+          namespace: ingress-basic
+          # Path to the manifest files which will be used for deployment.
+          manifests: |
+              k8s/deploy.yml
+              k8s/service.yml
