@@ -2,7 +2,7 @@
 
 name: CI
 
-# Controls when the action will run. 
+# Controls when the action will run.
 on:
   # Triggers the workflow on push or pull request events but only for the master branch
   push:
@@ -24,7 +24,7 @@ jobs:
     steps:
       # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
       - uses: actions/checkout@v2
-      
+
       # Login against a Docker registry
       - name: Docker Login
         # You may pin to the exact commit or the version.
@@ -35,17 +35,20 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           # Password or personal access token used to log against the Docker registry
           password: ${{ secrets.DOCKER_PASSWORD }}
-          
+
+      # Build and push docker image
       - run: |
           docker build -t caiquebb/laravel-todo -f docker/Dockerfile.prod .
           docker push caiquebb/laravel-todo
-      
+
+      # Set Azure AKS config
       - name: Kubernetes set context
         uses: Azure/k8s-set-context@v1
         with:
           # Kubernetes Config
           kubeconfig: ${{ secrets.PIGVELOP_AKS_KUBECONFIG }}
-          
+
+      # Deploy to AKS
       - name: Deploy to Kubernetes cluster
         uses: Azure/k8s-deploy@v1.3
         with:
