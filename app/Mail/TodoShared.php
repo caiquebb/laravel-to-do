@@ -36,8 +36,7 @@ class TodoShared extends Mailable
      */
     public function build()
     {
-        return $this->from('caiquebb@gmail.com')
-            ->markdown('emails.todos.shared')
+        return $this->markdown('emails.todos.shared')
             ->with([
                 'userName' => $this->todo->user->name,
                 'todoUrl' => route('todos.show', [ 'slug' => $this->todo->slug ]),
