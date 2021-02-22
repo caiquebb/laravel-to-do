@@ -26,9 +26,9 @@ Route::get('/', function () {
 });
 
 Route::middleware(['auth:sanctum', 'verified'])->group(function () {
-    Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
-    })->name('dashboard');
+    Route::get('/about', function () {
+        return Inertia::render('About');
+    })->name('about');
 
     Route::prefix('/todos')->name('todos.')->group(function () {
         Route::get('/', function () {

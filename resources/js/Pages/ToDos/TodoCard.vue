@@ -80,9 +80,15 @@
 
             <template v-if="!todo.deleted_at">
                 <div @click="toggleTodoItemCard" class="border-t border-gray-200 flex justify-center py-1 hover:bg-gray-200 cursor-pointer">
-                    <jet-svg-icon v-if="showTodoItemCard" icon="chevronDoubleUp" size="sm"/>
+                    <div v-if="showTodoItemCard" class="flex flex-row items-center">
+                        <span class="mr-2 text-xs font-semibold">Hide items</span>
+                        <jet-svg-icon icon="chevronDoubleUp" size="sm"/>
+                    </div>
 
-                    <jet-svg-icon v-else icon="chevronDoubleDown" size="sm"/>
+                    <div v-else class="flex flex-row items-center">
+                        <span class="mr-2 text-xs font-semibold">Show items</span>
+                        <jet-svg-icon icon="chevronDoubleDown" size="sm"/>
+                    </div>
                 </div>
 
                 <todo-item-card v-if="showTodoItemCard" :todo="todo"/>
