@@ -17,3 +17,7 @@ supervisord.*
 public/js
 public/css
 public/mix-manifest.json
+
+# k8s
+k8s/secret.yml
+k8s/configmap.yml

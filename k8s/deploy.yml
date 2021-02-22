@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: pigvelop-todo
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: pigvelop-todo
+  template:
+    metadata:
+      labels:
+        app: pigvelop-todo
+    spec:
+      containers:
+        - name: pigvelop-todo
+          image: caiquebb/laravel-todo
+          ports:
+            - containerPort: 80
+
+          envFrom:
+            - secretRef:
+                name: pigvelop-todo-secret
+
+          volumeMounts:
+            - name: pigvelop-todo-volume
+              mountPath: /var/www/html/.env
+              subPath: .env
+
+      volumes:
+        - name: pigvelop-todo-volume
+          configMap:
+            name: pigvelop-todo-conf
+            items:
+              - key: env
+                path: .env

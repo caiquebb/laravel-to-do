@@ -1,0 +1,10 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: pigvelop-todo-service
+spec:
+  type: ClusterIP
+  selector:
+    app: pigvelop-todo
+  ports:
+    - port: 80
