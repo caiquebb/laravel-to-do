@@ -28,4 +28,4 @@ jobs:
       - name: Delete AKS cluster
         uses: Azure/cli@1.0.4
         with:
-          inlineScript: az aks delete --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME
+          inlineScript: az aks delete --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME --yes
