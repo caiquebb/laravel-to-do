@@ -28,8 +28,12 @@ jobs:
         with:
           creds: ${{ secrets.AZURE_CREDENTIALS }}
 
-      # Create AKS
-      - name: Azure CLI Action
+      - name: Create resource group
         uses: Azure/cli@1.0.4
         with:
           inlineScript: az group create --name $RESOURCE_GROUP --location eastus
+
+      - name: Create AKS cluster
+        uses: Azure/cli@1.0.4
+        with:
+          inlineScript: az aks create --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME --node-count 1 --enable-addons monitoring --generate-ssh-keys
