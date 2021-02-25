@@ -1,6 +1,6 @@
 # This is a basic workflow to help you get started with Actions
 
-name: 00 - Create AKS Cluster (On-Demand)
+name: 99 - Delete AKS Cluster (On-Demand)
 
 # Controls when the action will run.
 on:
@@ -33,4 +33,4 @@ jobs:
       - name: Create AKS cluster
         uses: Azure/cli@1.0.4
         with:
-          inlineScript: az aks create --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME --node-count 1 --enable-addons monitoring --generate-ssh-keys
+          inlineScript: az aks Delete --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME
