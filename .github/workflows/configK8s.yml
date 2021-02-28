@@ -68,7 +68,7 @@ jobs:
       - name: Install cert-manager
         run: |
           # Label the namespace to disable resource validation
-          kubectl label namespace $K8S_NAMESPACE cert-manager.io/disable-validation=true
+          kubectl label namespace $K8S_NAMESPACE cert-manager.io/disable-validation=true --overwrite
 
           # Add the Jetstack Helm repository
           helm repo add jetstack https://charts.jetstack.io
