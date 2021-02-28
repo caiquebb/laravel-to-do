@@ -1,8 +1,5 @@
-# This is a basic workflow to help you get started with Actions
-
 name: 10 - Config AKS Cluster (On-Demand)
 
-# Controls when the action will run.
 on:
   workflow_dispatch:
 
@@ -11,15 +8,15 @@ env:
   CLUSTER_NAME: pigvelopAKS
   K8S_NAMESPACE: pigvelop
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
-  condig:
-    # The type of runner that the job will run on
+  config:
+    name: Configure Kubernets
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
+      - name: Helm tool installer
+        uses: Azure/setup-helm@v1
+
       - name: Kubectl tool installer
         uses: Azure/setup-kubectl@v1
 
@@ -27,9 +24,6 @@ jobs:
         uses: Azure/k8s-set-context@v1
         with:
           kubeconfig: ${{ secrets.PIGVELOP_AKS_KUBECONFIG }}
-
-      - name: Helm tool installer
-        uses: Azure/setup-helm@v1
 
       - name: Create an Ingress Controller
         run: |
