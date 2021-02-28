@@ -20,7 +20,9 @@ jobs:
           php artisan key:generate
 
       - name: Run Database migrations
-        run: php artisan migrate
+        run: |
+          apt-get install -y php8.0-mysql
+          php artisan migrate
 
       - name: Run Laravel ToDo Test
         run: php artisan test
