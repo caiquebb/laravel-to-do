@@ -31,23 +31,23 @@ jobs:
         with:
           inlineScript: |
             az aks install-cli
-            az aks get-credentials --resource-group $(RESOURCE_GROUP) --name $(CLUSTER_NAME)
+            az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME
 
       - name: Helm tool installer
         uses: Azure/setup-helm@v1
 
       - run:
         # Create a namespace for your ingress resources
-        kubectl get namespace $(K8S_NAMESPACE) || \
-          kubectl create namespace $(K8S_NAMESPACE)
+        kubectl get namespace $K8S_NAMESPACE || \
+          kubectl create namespace $K8S_NAMESPACE
 
         # Add the ingress-nginx repository
         helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 
         # Use Helm to deploy an NGINX ingress controller
-        helm status nginx-ingress --namespace $(K8S_NAMESPACE) || \
+        helm status nginx-ingress --namespace $K8S_NAMESPACE || \
           helm install nginx-ingress ingress-nginx/ingress-nginx \
-            --namespace $(K8S_NAMESPACE) \
+            --namespace $K8S_NAMESPACE \
             --set controller.replicaCount=1 \
             --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux \
             --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux \
@@ -55,10 +55,10 @@ jobs:
 
       - run:
         # Public IP address of your ingress controller
-        IP=$(kubectl --namespace $(K8S_NAMESPACE) get services nginx-ingress-ingress-nginx-controller -o=jsonpath="{.status.loadBalancer.ingress[0].ip}")
+        IP=$(kubectl --namespace $K8S_NAMESPACE get services nginx-ingress-ingress-nginx-controller -o=jsonpath="{.status.loadBalancer.ingress[0].ip}")
 
         # Name to associate with public IP address
-        DNS_NAME="$(K8S_NAMESPACE)"
+        DNS_NAME="$K8S_NAMESPACE"
 
         # Get the resource-id of the public ip
         PUBLIC_IP_ID=$(az network public-ip list --query "[?ipAddress!=null]|[?contains(ipAddress, '$IP')].[id]" --output tsv)
@@ -71,7 +71,7 @@ jobs:
 
       - run:
         # Label the namespace to disable resource validation
-        kubectl label namespace $(K8S_NAMESPACE) cert-manager.io/disable-validation=true
+        kubectl label namespace $K8S_NAMESPACE cert-manager.io/disable-validation=true
 
         # Add the Jetstack Helm repository
         helm repo add jetstack https://charts.jetstack.io
@@ -80,9 +80,9 @@ jobs:
         helm repo update
 
         # Install the cert-manager Helm chart
-        helm status cert-manager --namespace $(K8S_NAMESPACE) || \
+        helm status cert-manager --namespace $K8S_NAMESPACE || \
           helm install cert-manager jetstack/cert-manager \
-            --namespace $(K8S_NAMESPACE) \
+            --namespace $K8S_NAMESPACE \
             --version v0.16.1 \
             --set installCRDs=true \
             --set nodeSelector."kubernetes\.io/os"=linux \
