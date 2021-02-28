@@ -80,3 +80,12 @@ jobs:
               --set nodeSelector."kubernetes\.io/os"=linux \
               --set webhook.nodeSelector."kubernetes\.io/os"=linux \
               --set cainjector.nodeSelector."kubernetes\.io/os"=linux
+
+      - name: Install MySQL
+        run: |
+          # Add the Azure Marketplace Helm repository
+          helm repo add azure-marketplace https://marketplace.azurecr.io/helm/v1/repo
+
+          # Install MySQL Helm chart
+          helm status mysql || \
+            helm install mysql azure-marketplace/mysql
