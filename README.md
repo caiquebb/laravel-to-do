@@ -49,6 +49,12 @@ Follow this steps to run the application locally.
     ./vendor/bin/sail artisan key:generate
     ```
 
+7. Compile the assets:
+    ``` bash
+    ./vendor/bin/sail npm install
+    ./vendor/bin/sail npm run dev
+    ```
+
 ## View Application
 
 To view the application access http://localhost.

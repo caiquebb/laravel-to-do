@@ -7,6 +7,9 @@ on:
 
   workflow_dispatch:
 
+env:
+  K8S_NAMESPACE: pigvelop
+
 jobs:
   test:
     name: Run Tests
@@ -65,7 +68,7 @@ jobs:
       - name: Deploy to Kubernetes cluster
         uses: Azure/k8s-deploy@v1.3
         with:
-          namespace: ingress-basic
+          namespace: $K8S_NAMESPACE
           manifests: |
               k8s/deploy.yml
               k8s/service.yml
