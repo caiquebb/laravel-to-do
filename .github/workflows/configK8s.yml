@@ -20,18 +20,13 @@ jobs:
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Perform a Azure Login
-      - name: Azure Login
-        uses: azure/login@v1
-        with:
-          creds: ${{ secrets.AZURE_CREDENTIALS }}
+      - name: Kubectl tool installer
+        uses: Azure/setup-kubectl@v1
 
-      - name: Install kubectl and get credentials
-        uses: Azure/cli@1.0.4
+      - name: Kubernetes set context
+        uses: Azure/k8s-set-context@v1
         with:
-          inlineScript: |
-            az aks install-cli
-            az aks get-credentials --resource-group $RESOURCE_GROUP --name $CLUSTER_NAME
+          kubeconfig: ${{ secrets.PIGVELOP_AKS_KUBECONFIG }}
 
       - name: Helm tool installer
         uses: Azure/setup-helm@v1
