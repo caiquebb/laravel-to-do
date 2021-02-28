@@ -36,55 +36,58 @@ jobs:
       - name: Helm tool installer
         uses: Azure/setup-helm@v1
 
-      - run:
-        # Create a namespace for your ingress resources
-        kubectl get namespace $K8S_NAMESPACE || \
-          kubectl create namespace $K8S_NAMESPACE
+      - name: Create an Ingress Controller
+        run: |
+          # Create a namespace for your ingress resources
+          kubectl get namespace $K8S_NAMESPACE || \
+            kubectl create namespace $K8S_NAMESPACE
 
-        # Add the ingress-nginx repository
-        helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
+          # Add the ingress-nginx repository
+          helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 
-        # Use Helm to deploy an NGINX ingress controller
-        helm status nginx-ingress --namespace $K8S_NAMESPACE || \
-          helm install nginx-ingress ingress-nginx/ingress-nginx \
-            --namespace $K8S_NAMESPACE \
-            --set controller.replicaCount=1 \
-            --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux \
-            --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux \
-            --set controller.admissionWebhooks.patch.nodeSelector."beta\.kubernetes\.io/os"=linux
+          # Use Helm to deploy an NGINX ingress controller
+          helm status nginx-ingress --namespace $K8S_NAMESPACE || \
+            helm install nginx-ingress ingress-nginx/ingress-nginx \
+              --namespace $K8S_NAMESPACE \
+              --set controller.replicaCount=1 \
+              --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux \
+              --set defaultBackend.nodeSelector."beta\.kubernetes\.io/os"=linux \
+              --set controller.admissionWebhooks.patch.nodeSelector."beta\.kubernetes\.io/os"=linux
 
-      - run:
-        # Public IP address of your ingress controller
-        IP=$(kubectl --namespace $K8S_NAMESPACE get services nginx-ingress-ingress-nginx-controller -o=jsonpath="{.status.loadBalancer.ingress[0].ip}")
+      - name: Configure an FQDN
+        run: |
+          # Public IP address of your ingress controller
+          IP=$(kubectl --namespace $K8S_NAMESPACE get services nginx-ingress-ingress-nginx-controller -o=jsonpath="{.status.loadBalancer.ingress[0].ip}")
 
-        # Name to associate with public IP address
-        DNS_NAME="$K8S_NAMESPACE"
+          # Name to associate with public IP address
+          DNS_NAME="$K8S_NAMESPACE"
 
-        # Get the resource-id of the public ip
-        PUBLIC_IP_ID=$(az network public-ip list --query "[?ipAddress!=null]|[?contains(ipAddress, '$IP')].[id]" --output tsv)
+          # Get the resource-id of the public ip
+          PUBLIC_IP_ID=$(az network public-ip list --query "[?ipAddress!=null]|[?contains(ipAddress, '$IP')].[id]" --output tsv)
 
-        # Update public ip address with DNS name
-        az network public-ip update --ids $PUBLIC_IP_ID --dns-name $DNS_NAME
+          # Update public ip address with DNS name
+          az network public-ip update --ids $PUBLIC_IP_ID --dns-name $DNS_NAME
 
-        # Display the FQDN
-        az network public-ip show --ids $PUBLIC_IP_ID --query "[dnsSettings.fqdn]" --output tsv
+          # Display the FQDN
+          az network public-ip show --ids $PUBLIC_IP_ID --query "[dnsSettings.fqdn]" --output tsv
 
-      - run:
-        # Label the namespace to disable resource validation
-        kubectl label namespace $K8S_NAMESPACE cert-manager.io/disable-validation=true
+      - name: Install cert-manager
+        run: |
+          # Label the namespace to disable resource validation
+          kubectl label namespace $K8S_NAMESPACE cert-manager.io/disable-validation=true
 
-        # Add the Jetstack Helm repository
-        helm repo add jetstack https://charts.jetstack.io
+          # Add the Jetstack Helm repository
+          helm repo add jetstack https://charts.jetstack.io
 
-        # Update your local Helm chart repository cache
-        helm repo update
+          # Update your local Helm chart repository cache
+          helm repo update
 
-        # Install the cert-manager Helm chart
-        helm status cert-manager --namespace $K8S_NAMESPACE || \
-          helm install cert-manager jetstack/cert-manager \
-            --namespace $K8S_NAMESPACE \
-            --version v0.16.1 \
-            --set installCRDs=true \
-            --set nodeSelector."kubernetes\.io/os"=linux \
-            --set webhook.nodeSelector."kubernetes\.io/os"=linux \
-            --set cainjector.nodeSelector."kubernetes\.io/os"=linux
+          # Install the cert-manager Helm chart
+          helm status cert-manager --namespace $K8S_NAMESPACE || \
+            helm install cert-manager jetstack/cert-manager \
+              --namespace $K8S_NAMESPACE \
+              --version v0.16.1 \
+              --set installCRDs=true \
+              --set nodeSelector."kubernetes\.io/os"=linux \
+              --set webhook.nodeSelector."kubernetes\.io/os"=linux \
+              --set cainjector.nodeSelector."kubernetes\.io/os"=linux
