@@ -35,8 +35,8 @@ jobs:
           helm repo add ingress-nginx https://kubernetes.github.io/ingress-nginx
 
           # Use Helm to deploy an NGINX ingress controller
-          helm status nginx-ingress-$K8S_NAMESPACE --namespace $K8S_NAMESPACE || \
-            helm install nginx-ingress-$K8S_NAMESPACE ingress-nginx/ingress-nginx \
+          helm status nginx-ingress --namespace $K8S_NAMESPACE || \
+            helm install nginx-ingress ingress-nginx/ingress-nginx \
               --namespace $K8S_NAMESPACE \
               --set controller.replicaCount=1 \
               --set controller.nodeSelector."beta\.kubernetes\.io/os"=linux \
@@ -46,7 +46,7 @@ jobs:
       - name: Configure an FQDN
         run: |
           # Public IP address of your ingress controller
-          IP=$(kubectl --namespace $K8S_NAMESPACE get services nginx-ingress-$K8S_NAMESPACE-ingress-nginx-controller -o=jsonpath="{.status.loadBalancer.ingress[0].ip}")
+          IP=$(kubectl --namespace $K8S_NAMESPACE get services nginx-ingress-ingress-nginx-controller -o=jsonpath="{.status.loadBalancer.ingress[0].ip}")
 
           # Name to associate with public IP address
           DNS_NAME="$K8S_NAMESPACE"
@@ -72,8 +72,8 @@ jobs:
           helm repo update
 
           # Install the cert-manager Helm chart
-          helm status cert-manager-$K8S_NAMESPACE --namespace $K8S_NAMESPACE || \
-            helm install cert-manager-$K8S_NAMESPACE jetstack/cert-manager \
+          helm status cert-manager --namespace $K8S_NAMESPACE || \
+            helm install cert-manager jetstack/cert-manager \
               --namespace $K8S_NAMESPACE \
               --version v0.16.1 \
               --set installCRDs=true \
