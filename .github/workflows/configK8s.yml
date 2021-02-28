@@ -46,7 +46,7 @@ jobs:
       - name: Configure an FQDN
         run: |
           # Public IP address of your ingress controller
-          IP=$(kubectl --namespace $K8S_NAMESPACE get services nginx-ingress-ingress-nginx-controller -o=jsonpath="{.status.loadBalancer.ingress[0].ip}")
+          IP=$(kubectl --namespace $K8S_NAMESPACE get services nginx-ingress-$K8S_NAMESPACE-ingress-nginx-controller -o=jsonpath="{.status.loadBalancer.ingress[0].ip}")
 
           # Name to associate with public IP address
           DNS_NAME="$K8S_NAMESPACE"
