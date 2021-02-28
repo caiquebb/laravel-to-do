@@ -6,7 +6,7 @@ jobs:
   test:
     name: Run Tests
     runs-on: ubuntu-latest
-    container: laravelsail/php80-composer:latest
+    container: caiquebb/php80-laravel:latest
 
     steps:
       - uses: actions/checkout@v2
@@ -19,24 +19,24 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
-      - name: Run Database migrations
-        run: |
-          echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu focal main" > /etc/apt/sources.list.d/ppa_ondrej_php.list
-          apt-get update
-          apt-get install -y php8.0-mysql
-          php artisan migrate
+      # - name: Run Database migrations
+      #   run: |
+      #     echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu focal main" > /etc/apt/sources.list.d/ppa_ondrej_php.list
+
+      #     apt-get install -y php8.0-mysql
+      #     php artisan migrate
 
       - name: Run Laravel ToDo Test
         run: php artisan test
 
-    services:
-      mysql:
-        image: 'mysql:8.0'
-        ports:
-            - '3306:3306'
-        env:
-            MYSQL_ROOT_PASSWORD: ''
-            MYSQL_DATABASE: 'laravel_todo'
-            MYSQL_USER: 'root'
-            MYSQL_PASSWORD: ''
-            MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
+    # services:
+    #   mysql:
+    #     image: 'mysql:8.0'
+    #     ports:
+    #         - '3306:3306'
+    #     env:
+    #         MYSQL_ROOT_PASSWORD: ''
+    #         MYSQL_DATABASE: 'laravel_todo'
+    #         MYSQL_USER: 'root'
+    #         MYSQL_PASSWORD: ''
+    #         MYSQL_ALLOW_EMPTY_PASSWORD: 'yes'
