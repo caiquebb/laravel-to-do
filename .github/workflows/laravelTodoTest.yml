@@ -1,0 +1,19 @@
+name: Laravel ToDo Test
+
+on: [push]
+
+jobs:
+  test:
+    name: Run Tests
+
+    container:
+      image: laravelsail/php80-composer:latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: composer Install
+
+      - name: Run Laravel ToDo Test
+        run: php artisan test
