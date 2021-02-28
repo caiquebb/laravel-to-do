@@ -19,8 +19,8 @@ jobs:
           cp .env.example .env
           php artisan key:generate
 
-      # - name: Run Database migrations
-      #   run: php artisan migrate
+      - name: Run Database migrations
+        run: php artisan migrate
 
       - name: Run Laravel ToDo Test
         run: php artisan test
