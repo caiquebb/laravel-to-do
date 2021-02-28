@@ -21,6 +21,8 @@ jobs:
 
       - name: Run Database migrations
         run: |
+          echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu focal main" > /etc/apt/sources.list.d/ppa_ondrej_php.list
+          apt-get update
           apt-get install -y php8.0-mysql
           php artisan migrate
 
