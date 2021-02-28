@@ -21,5 +21,5 @@ jobs:
 
       - name: Run Laravel ToDo Test
         run: |
-          php artisan test
-          cat storage/logs/laravel.log
+          php artisan test || \
+            cat storage/logs/laravel.log
