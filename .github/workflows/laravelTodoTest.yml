@@ -20,7 +20,6 @@ jobs:
           php artisan key:generate
 
       - name: Run Laravel ToDo Test
-        run: php artisan test
-
-      - name: See Logs
-        run: cat storage/logs/laravel.log
+        run: |
+          php artisan test
+          cat storage/logs/laravel.log
