@@ -86,6 +86,12 @@ jobs:
               --set webhook.nodeSelector."kubernetes\.io/os"=linux \
               --set cainjector.nodeSelector."kubernetes\.io/os"=linux
 
+      - name: Create a CA cluster issuer
+        uses: Azure/k8s-deploy@v1.3
+        with:
+          namespace: ingress-basic
+          manifests: k8s/cluster-issuer.yml
+
       - name: Install MySQL
         run: |
           # Add the Azure Marketplace Helm repository
