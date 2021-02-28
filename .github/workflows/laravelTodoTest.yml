@@ -20,11 +20,7 @@ jobs:
           php artisan key:generate
 
       - name: Run Database migrations
-        run: |
-          echo "deb http://ppa.launchpad.net/ondrej/php/ubuntu focal main" > /etc/apt/sources.list.d/ppa_ondrej_php.list
-
-          apt-get install -y php8.0-mysql
-          php artisan migrate
+        run: php artisan migrate
 
       - name: Run Laravel ToDo Test
         run: php artisan test
