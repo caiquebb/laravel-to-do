@@ -1,15 +1,41 @@
 name: 30 - Laravel ToDo CI /CD
 
 on:
-  release:
-    types: [published]
+  push:
+    branches:
+      - master
 
   workflow_dispatch:
 
 jobs:
+  test:
+    name: Run Tests
+    runs-on: ubuntu-latest
+    container: caiquebb/php80-laravel:latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Install Dependencies
+        run: composer install
+
+      - name: Configure Application
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: Compile assets
+        run: |
+          npm install
+          npm run prod
+
+      - name: Run Laravel ToDo Tests
+        run: php artisan test
+
   build:
     name: Build Docker Image
     runs-on: ubuntu-latest
+    needs: test
     steps:
       - uses: actions/checkout@v2
 
