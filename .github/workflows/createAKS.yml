@@ -1,8 +1,5 @@
-# This is a basic workflow to help you get started with Actions
-
 name: 00 - Create AKS Cluster (On-Demand)
 
-# Controls when the action will run.
 on:
   workflow_dispatch:
 
@@ -10,16 +7,12 @@ env:
   RESOURCE_GROUP: pigvelop
   CLUSTER_NAME: pigvelopAKS
 
-# A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
-  # This workflow contains a single job called "build"
   create:
-    # The type of runner that the job will run on
+    name: Create AKS Cluster
     runs-on: ubuntu-latest
 
-    # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
-      # Perform a Azure Login
       - name: Azure Login
         uses: azure/login@v1
         with:
