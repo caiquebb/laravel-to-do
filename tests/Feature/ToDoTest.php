@@ -49,24 +49,6 @@ class ToDoTest extends TestCase
         $this->assertCount(0, $user->fresh()->todos);
     }
 
-    public function test_user_can_delete_todo()
-    {
-        $this->actingAs($user = User::factory()->create());
-
-        $response = $this->post("/api/users/{$user->id}/todos", [
-            'description' => 'My ToDo',
-        ]);
-
-        $this->assertCount(1, $user->fresh()->todos);
-        $this->assertEquals('My ToDo', $user->fresh()->todos->first()->description);
-
-        $todo = $user->fresh()->todos->first();
-
-        $response = $this->delete("/api/todos/{$todo->id}");
-
-        $this->assertCount(0, $user->fresh()->todos);
-    }
-
     public function test_user_can_restore_a_deleted_todo()
     {
         $this->actingAs($user = User::factory()->create());
