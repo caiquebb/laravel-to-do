@@ -43,7 +43,7 @@ jobs:
       - name: Install Dependencies
         run: composer install
 
-      - name: Configure Application
+      - name: Check code style with standard PSR12
         run: ./vendor/bin/phpcs -p --standard=PSR12 --runtime-set ignore_warnings_on_exit 1 app
 
   build:
